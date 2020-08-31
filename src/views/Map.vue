@@ -47,7 +47,7 @@
       <l-marker :key="arrow.key" :lat-lng="arrow.latlng" :duration="2000">
         <l-icon :icon-anchor="staticAnchor2" :popup-anchor="popupAnchor">
           <!-- <div class="headline">{{ customText }}</div> -->
-          <img src="../static/images/action_arrow.png" width="30px" height="36px" style="transform:rotate(30deg);" />
+          <img src="../static/images/action_arrow.png" width="30px" height="36px" :style="getImgStyle(arrow.angle)" />
         </l-icon>
       </l-marker>
     </template>
@@ -96,6 +96,9 @@ export default {
     }
   },
   methods: {
+    getImgStyle (angle) {
+      return 'transform:rotate(' + angle + 'deg)'
+    },
     openPopUp (latLng, caller) {
       if (caller !== 'tooltip') {
         this.caller = caller
@@ -109,12 +112,35 @@ export default {
       var arrowsLatLngs = []
       for (let i = 0; i < this.data.aisData.length; i++) {
         for (let j = 0; j < this.data.aisData[i].latlngs.length - 1; j++) {
-          let arrowLat = (this.data.aisData[i].latlngs[j][0] + this.data.aisData[i].latlngs[j + 1][0]) / 2
-          let arrowLng = (this.data.aisData[i].latlngs[j][1] + this.data.aisData[i].latlngs[j + 1][1]) / 2
+          let firstAisLat = this.data.aisData[i].latlngs[j][0]
+          let firstAisLng = this.data.aisData[i].latlngs[j][1]
+          let secondAisLat = this.data.aisData[i].latlngs[j + 1][0]
+          let secondAisLng = this.data.aisData[i].latlngs[j + 1][1]
+          let arrowLat = (firstAisLat + secondAisLat) / 2
+          let arrowLng = (firstAisLng + secondAisLng) / 2
+
+          let A = {X: firstAisLng, Y: firstAisLat}
+          let B = {X: firstAisLng, Y: firstAisLat + 1}
+          let C = {X: secondAisLng, Y: secondAisLat}
+          var AB = Math.sqrt(Math.pow(A.X - B.X, 2) + Math.pow(A.Y - B.Y, 2))
+          var AC = Math.sqrt(Math.pow(A.X - C.X, 2) + Math.pow(A.Y - C.Y, 2))
+          var BC = Math.sqrt(Math.pow(B.X - C.X, 2) + Math.pow(B.Y - C.Y, 2))
+          var cosA = (
+            Math.pow(AB, 2) + Math.pow(AC, 2) - Math.pow(BC, 2)
+          ) / (
+            2 * AB * AC
+          )
+          var angleA = 0
+          if (secondAisLng < firstAisLng) {
+            angleA = -Math.round(Math.acos(cosA) * 180 / Math.PI)
+          } else {
+            angleA = Math.round(Math.acos(cosA) * 180 / Math.PI)
+          }
           arrowsLatLngs.push({
             key: 'arrow' + i + j,
             color: this.data.aisData[i].color,
-            latlng: [arrowLat, arrowLng]
+            latlng: [arrowLat, arrowLng],
+            angle: angleA
           })
         }
       }
