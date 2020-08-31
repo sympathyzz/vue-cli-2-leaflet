@@ -13,7 +13,7 @@ Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 })
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, { size: 'small', zIndex: 3000 })
 Vue.config.productionTip = false
 
 new Vue({

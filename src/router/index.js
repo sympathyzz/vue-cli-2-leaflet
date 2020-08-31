@@ -24,9 +24,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Markers.vue')
   },
   {
-    path: '/layerGroup',
-    name: 'LayerGroup',
-    component: () => import(/* webpackChunkName: "about" */ '../views/LayerGroup.vue')
+    path: '/element-ui',
+    name: 'Element-ui',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Element-ui.vue')
   }
 ]
 

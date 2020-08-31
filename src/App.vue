@@ -4,7 +4,7 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/map">Map</router-link>|
       <router-link to="/markers">Markers</router-link>|
-      <router-link to="/layerGroup">LayerGroup</router-link>|
+      <router-link to="/element-ui">ElementUI</router-link>|
     </div>
     <router-view/>
   </div>
